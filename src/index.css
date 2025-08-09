@@ -1,3 +1,146 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=EB+Garamond:wght@400;500;600&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+:root {
+  --brand: 222 47% 11%;
+  --accent: 221 83% 53%;
+  --muted: 215 20% 50%;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  body {
+    @apply font-sans text-gray-900 bg-gray-50;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-medium leading-tight;
+  }
+  
+  h1 {
+    @apply text-2xl;
+  }
+  
+  h2 {
+    @apply text-xl;
+  }
+  
+  h3 {
+    @apply text-lg;
+  }
+  
+  p {
+    @apply leading-relaxed;
+  }
+  
+  .container {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+}
+
+@layer components {
+  .btn {
+    @apply inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent disabled:pointer-events-none disabled:opacity-50;
+  }
+  
+  .btn-primary {
+    @apply btn bg-brand text-white hover:bg-brand/90;
+  }
+  
+  .btn-secondary {
+    @apply btn bg-gray-100 text-gray-900 hover:bg-gray-200;
+  }
+  
+  .btn-ghost {
+    @apply btn hover:bg-gray-100;
+  }
+  
+  .btn-sm {
+    @apply h-8 px-3 text-xs;
+  }
+  
+  .btn-md {
+    @apply h-10 px-4;
+  }
+  
+  .input {
+    @apply flex h-10 w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent disabled:cursor-not-allowed disabled:opacity-50;
+  }
+}
+
+@layer utilities {
+  /* Page break utilities */
+  .avoid-break {
+    break-inside: avoid;
+  }
+  
+  .break-before {
+    break-before: page;
+  }
+  
+  .print-no-shadow {
+    box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  }
+}
+
+/* Print styles */
+@media print {
+  /* Default to A4, but allow override */
+  @page {
+    size: A4;
+    margin: 12mm;
+  }
+  
+  /* Paper size specific rules */
+  .paper-a4 {
+    @page {
+      size: A4;
+      margin: 12mm;
+    }
+  }
+  
+  .paper-letter {
+    @page {
+      size: letter;
+      margin: 0.5in;
+    }
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+  
+  .page {
+    margin: 0 !important;
+    border: none !important;
+  }
+  
+  .print-no-shadow {
+    box-shadow: none !important;
+  }
+  
+  body {
+    @apply bg-white;
+  }
+  
+  * {
+    -webkit-print-color-adjust: exact !important;
+    color-adjust: exact !important;
+  }
+  
+  /* Ensure text remains selectable and ATS-friendly */
+  h1, h2, h3, h4, h5, h6, p, li, span {
+    -webkit-user-select: text !important;
+    -moz-user-select: text !important;
+    -ms-user-select: text !important;
+    user-select: text !important;
+  }
+}

@@ -1,16 +1,17 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+/**
+ * Main App component - AI Resume Builder application
+ * Renders the complete application with AppShell layout and PreviewCanvas
+ */
+
+import { AppShell } from './components/layout/AppShell';
+import { PreviewCanvas } from './components/preview/PreviewCanvas';
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
-      <h1 className='text-red-700 font-bold text-5xl'>hum dono ka project </h1>
-    </>
-  )
+    <AppShell>
+      <PreviewCanvas />
+    </AppShell>
+  );
 }
 
-export default App
+export default App;
