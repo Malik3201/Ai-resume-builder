@@ -8,7 +8,7 @@ function App() {
 
   return (
     <>
-      
+      <h1 className='text-red-700 font-bold text-5xl'>hum dono ka project </h1>
     </>
   )
 }
