@@ -1,6 +1,6 @@
 /**
- * Experience section with multiple experience blocks
- * Handles adding, removing, and editing experience entries
+ * Education section with multiple education blocks
+ * Handles adding, removing, and editing education entries with AI assistance
  */
 
 import { useForm } from 'react-hook-form';
@@ -12,14 +12,14 @@ import { Input, Textarea, Label, ErrorText, HelpText, FieldRow } from '../../ui/
 import { AiDescribe } from '../../ai/AiDescribe';
 
 /**
- * Individual experience block form
+ * Individual education block form
  * @param {Object} props
- * @param {Object} props.block - Experience block data
+ * @param {Object} props.block - Education block data
  * @param {string} props.sectionId - Parent section ID
  * @param {number} props.index - Block index for display
  * @param {function} props.onDelete - Delete callback
  */
-function ExperienceBlock({ block, sectionId, index, onDelete }) {
+function EducationBlock({ block, sectionId, index, onDelete }) {
   const updateField = useEditorStore(state => state.updateField);
 
   const {
@@ -29,12 +29,13 @@ function ExperienceBlock({ block, sectionId, index, onDelete }) {
     setValue,
   } = useForm({
     defaultValues: {
-      role: block.fields.role || '',
-      company: block.fields.company || '',
+      degree: block.fields.degree || '',
+      school: block.fields.school || '',
       location: block.fields.location || '',
       startDate: block.fields.startDate || '',
       endDate: block.fields.endDate || '',
-      skills: Array.isArray(block.fields.skills) ? block.fields.skills.join(', ') : '',
+      gpa: block.fields.gpa || '',
+      coursework: Array.isArray(block.fields.coursework) ? block.fields.coursework.join(', ') : '',
       description: block.fields.description || '',
     },
     mode: 'onChange',
@@ -48,17 +49,9 @@ function ExperienceBlock({ block, sectionId, index, onDelete }) {
     Object.entries(watchedFields).forEach(([field, value]) => {
       let processedValue = value;
       
-      // Handle skills CSV conversion
-      if (field === 'skills') {
+      // Handle coursework CSV conversion
+      if (field === 'coursework') {
         processedValue = value ? value.split(',').map(s => s.trim()).filter(Boolean) : [];
-      }
-      
-      // Handle highlights conversion from description
-      if (field === 'description') {
-        const highlights = value ? value.split('\n').filter(line => line.trim()) : [];
-        if (JSON.stringify(highlights) !== JSON.stringify(block.fields.highlights)) {
-          updateField(sectionId, block.id, 'highlights', highlights);
-        }
       }
 
       if (JSON.stringify(processedValue) !== JSON.stringify(block.fields[field])) {
@@ -70,26 +63,24 @@ function ExperienceBlock({ block, sectionId, index, onDelete }) {
   // Update form when store changes
   useEffect(() => {
     Object.entries(block.fields).forEach(([field, value]) => {
-      if (field === 'skills' && Array.isArray(value)) {
+      if (field === 'coursework' && Array.isArray(value)) {
         setValue(field, value.join(', '), { shouldValidate: false, shouldDirty: false });
-      } else if (field === 'highlights' && Array.isArray(value)) {
-        setValue('description', value.join('\n'), { shouldValidate: false, shouldDirty: false });
       } else {
         setValue(field, value, { shouldValidate: false, shouldDirty: false });
       }
     });
-  }, [block.id, setValue]); // Only depend on block ID to avoid infinite loops
+  }, [block.id, setValue]);
 
   return (
     <div className="border border-gray-200 rounded-lg p-4 space-y-4">
       <div className="flex items-center justify-between">
         <h4 className="font-medium text-gray-900">
-          Experience #{index + 1}
+          Education #{index + 1}
         </h4>
         <button
           onClick={() => onDelete(block.id)}
           className="btn btn-ghost btn-sm text-red-600 hover:text-red-700 hover:bg-red-50"
-          aria-label={`Delete experience ${index + 1}`}
+          aria-label={`Delete education ${index + 1}`}
         >
           <Trash2 className="h-4 w-4" />
         </button>
@@ -97,33 +88,33 @@ function ExperienceBlock({ block, sectionId, index, onDelete }) {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <FieldRow>
-          <Label htmlFor={`role-${block.id}`} required>
-            Job Title
+          <Label htmlFor={`degree-${block.id}`} required>
+            Degree/Program
           </Label>
           <Input
-            id={`role-${block.id}`}
-            placeholder="Frontend Engineer"
-            error={!!errors.role}
-            {...register('role', {
-              required: 'Job title is required',
+            id={`degree-${block.id}`}
+            placeholder="Bachelor of Science in Computer Science"
+            error={!!errors.degree}
+            {...register('degree', {
+              required: 'Degree or program is required',
             })}
           />
-          <ErrorText>{errors.role?.message}</ErrorText>
+          <ErrorText>{errors.degree?.message}</ErrorText>
         </FieldRow>
 
         <FieldRow>
-          <Label htmlFor={`company-${block.id}`} required>
-            Company
+          <Label htmlFor={`school-${block.id}`} required>
+            School/Institution
           </Label>
           <Input
-            id={`company-${block.id}`}
-            placeholder="TechCorp Solutions"
-            error={!!errors.company}
-            {...register('company', {
-              required: 'Company is required',
+            id={`school-${block.id}`}
+            placeholder="University of California, Berkeley"
+            error={!!errors.school}
+            {...register('school', {
+              required: 'School is required',
             })}
           />
-          <ErrorText>{errors.company?.message}</ErrorText>
+          <ErrorText>{errors.school?.message}</ErrorText>
         </FieldRow>
       </div>
 
@@ -133,87 +124,91 @@ function ExperienceBlock({ block, sectionId, index, onDelete }) {
         </Label>
         <Input
           id={`location-${block.id}`}
-          placeholder="San Francisco, CA"
+          placeholder="Berkeley, CA"
           error={!!errors.location}
           {...register('location')}
         />
         <ErrorText>{errors.location?.message}</ErrorText>
       </FieldRow>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <FieldRow>
-          <Label htmlFor={`startDate-${block.id}`} required>
+          <Label htmlFor={`startDate-${block.id}`}>
             Start Date
           </Label>
           <Input
             id={`startDate-${block.id}`}
-            placeholder="Jan 2020"
+            placeholder="Aug 2018"
             error={!!errors.startDate}
-            {...register('startDate', {
-              required: 'Start date is required',
-            })}
+            {...register('startDate')}
           />
           <ErrorText>{errors.startDate?.message}</ErrorText>
-          <HelpText>Format: Jan 2023</HelpText>
+          <HelpText>Format: Aug 2018</HelpText>
         </FieldRow>
 
         <FieldRow>
-          <Label htmlFor={`endDate-${block.id}`} required>
+          <Label htmlFor={`endDate-${block.id}`}>
             End Date
           </Label>
           <Input
             id={`endDate-${block.id}`}
-            placeholder="Present"
+            placeholder="May 2022"
             error={!!errors.endDate}
-            {...register('endDate', {
-              required: 'End date is required',
-            })}
+            {...register('endDate')}
           />
           <ErrorText>{errors.endDate?.message}</ErrorText>
-          <HelpText>Format: Dec 2023 or Present</HelpText>
+          <HelpText>Format: May 2022 or Expected</HelpText>
+        </FieldRow>
+
+        <FieldRow>
+          <Label htmlFor={`gpa-${block.id}`}>
+            GPA (Optional)
+          </Label>
+          <Input
+            id={`gpa-${block.id}`}
+            placeholder="3.8"
+            error={!!errors.gpa}
+            {...register('gpa')}
+          />
+          <ErrorText>{errors.gpa?.message}</ErrorText>
         </FieldRow>
       </div>
 
       <FieldRow>
-        <Label htmlFor={`skills-${block.id}`}>
-          Skills Used
+        <Label htmlFor={`coursework-${block.id}`}>
+          Relevant Coursework
         </Label>
         <Input
-          id={`skills-${block.id}`}
-          placeholder="React, TypeScript, Node.js"
-          error={!!errors.skills}
-          {...register('skills')}
+          id={`coursework-${block.id}`}
+          placeholder="Data Structures, Algorithms, Machine Learning"
+          error={!!errors.coursework}
+          {...register('coursework')}
         />
-        <ErrorText>{errors.skills?.message}</ErrorText>
-        <HelpText>Separate skills with commas</HelpText>
+        <ErrorText>{errors.coursework?.message}</ErrorText>
+        <HelpText>Separate courses with commas</HelpText>
       </FieldRow>
 
       <FieldRow>
         <div className="flex items-center justify-between">
           <Label htmlFor={`description-${block.id}`}>
-            Key Achievements
+            Description
           </Label>
           <AiDescribe
             context={{
-              section: 'experience',
-              role: block.fields.role,
-              organization: block.fields.company,
+              section: 'education',
+              role: block.fields.degree,
+              organization: block.fields.school,
               location: block.fields.location,
               start: block.fields.startDate,
               end: block.fields.endDate,
-              skills: Array.isArray(block.fields.skills) ? block.fields.skills : [],
+              skills: Array.isArray(block.fields.coursework) ? block.fields.coursework : [],
               style: 'concise',
               lang: 'en',
-              wantBullets: true
+              wantBullets: false
             }}
             onApply={(result) => {
               // Apply paragraph to description field
               setValue('description', result.paragraph, { shouldDirty: true });
-              
-              // Apply bullets to highlights if available
-              if (result.bullets && result.bullets.length > 0) {
-                updateField(sectionId, block.id, 'highlights', result.bullets);
-              }
             }}
             size="sm"
             variant="ghost"
@@ -221,97 +216,100 @@ function ExperienceBlock({ block, sectionId, index, onDelete }) {
         </div>
         <Textarea
           id={`description-${block.id}`}
-          rows={4}
-          placeholder="Led development of microservices architecture&#10;Reduced system latency by 40%&#10;Mentored 5 junior developers"
+          rows={3}
+          placeholder="Focused on computer science fundamentals with emphasis on software engineering and data analysis..."
           error={!!errors.description}
           {...register('description')}
         />
         <ErrorText>{errors.description?.message}</ErrorText>
-        <HelpText>Each line will become a bullet point. Tip: You can edit the generated text.</HelpText>
+        <HelpText>Optional description of your academic focus or achievements. Tip: You can edit the generated text.</HelpText>
       </FieldRow>
     </div>
   );
 }
 
 /**
- * ExperienceSection component with multiple blocks
+ * EducationSection component with multiple blocks
  */
-export function ExperienceSection() {
+export function EducationSection() {
   const doc = useEditorStore(state => state.doc);
   const addBlock = useEditorStore(state => state.addBlock);
   const removeBlock = useEditorStore(state => state.removeBlock);
 
-  // Find experience section
-  const experienceSection = doc.sections.find(s => s.type === 'experience');
+  // Find education section or create it if it doesn't exist
+  let educationSection = doc.sections.find(s => s.type === 'education');
+  
+  // If education section doesn't exist, we'll need to create it
+  // For now, let's assume it exists or will be created by the store
 
-  const handleAddExperience = () => {
-    if (!experienceSection) return;
+  const handleAddEducation = () => {
+    if (!educationSection) return;
 
     const newBlock = {
-      id: uid('exp'),
-      type: 'experience',
+      id: uid('edu'),
+      type: 'education',
       fields: {
-        role: '',
-        company: '',
+        degree: '',
+        school: '',
         location: '',
         startDate: '',
         endDate: '',
-        highlights: [],
+        gpa: '',
+        coursework: [],
         description: '',
-        skills: [],
       },
     };
 
-    addBlock(experienceSection.id, newBlock);
+    addBlock(educationSection.id, newBlock);
   };
 
-  const handleDeleteExperience = (blockId) => {
-    if (!experienceSection) return;
-    removeBlock(experienceSection.id, blockId);
+  const handleDeleteEducation = (blockId) => {
+    if (!educationSection) return;
+    removeBlock(educationSection.id, blockId);
   };
 
-  if (!experienceSection) {
+  if (!educationSection) {
     return (
       <div className="p-4 text-sm text-gray-500">
-        Experience section not found
+        Education section not found
       </div>
     );
   }
 
   return (
     <div className="space-y-4">
-      {experienceSection.blocks.length === 0 ? (
+      {educationSection.blocks.length === 0 ? (
         <div className="text-center py-8 text-gray-500">
-          <p className="mb-4">No experience entries yet</p>
+          <p className="mb-4">No education entries yet</p>
           <button
-            onClick={handleAddExperience}
+            onClick={handleAddEducation}
             className="btn btn-primary btn-md"
           >
             <Plus className="h-4 w-4 mr-2" />
-            Add Your First Experience
+            Add Your First Education
           </button>
         </div>
       ) : (
         <>
           <div className="space-y-4">
-            {experienceSection.blocks.map((block, index) => (
-              <ExperienceBlock
+            {educationSection.blocks.map((block, index) => (
+              <EducationBlock
                 key={block.id}
                 block={block}
-                sectionId={experienceSection.id}
+                sectionId={educationSection.id}
                 index={index}
-                onDelete={handleDeleteExperience}
+                onDelete={handleDeleteEducation}
               />
             ))}
           </div>
 
           <div className="pt-4 border-t border-gray-200">
             <button
-              onClick={handleAddExperience}
+              onClick={handleAddEducation}
               className="btn btn-secondary btn-md w-full"
             >
               <Plus className="h-4 w-4 mr-2" />
-              Add Another Experience
+              Add Another Education
             </button>
           </div>
         </>

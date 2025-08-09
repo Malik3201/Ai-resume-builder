@@ -144,3 +144,42 @@
     user-select: text !important;
   }
 }
+
+/* Print page specific styles */
+.print-page {
+  background: white !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.print-container {
+  width: 100vw;
+  min-height: 100vh;
+  background: white;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 0;
+}
+
+.print-page-content {
+  background: white;
+  box-shadow: none !important;
+  border: none !important;
+}
+
+/* Ensure fonts load properly for PDF generation */
+@media screen {
+  .print-page-content {
+    font-display: swap;
+  }
+}
+
+/* Override any conflicting styles for print pages */
+.print-page * {
+  box-sizing: border-box;
+}
+
+.print-page .no-print {
+  display: none !important;
+}

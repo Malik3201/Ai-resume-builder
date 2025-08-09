@@ -149,5 +149,26 @@ export const sampleResume = {
         },
       ],
     },
+    {
+      id: 'education_section',
+      type: 'education',
+      title: 'Education',
+      blocks: [
+        {
+          id: 'education_block_001',
+          type: 'education',
+          fields: {
+            degree: 'Bachelor of Science in Computer Science',
+            school: 'University of California, Berkeley',
+            location: 'Berkeley, CA',
+            startDate: 'Aug 2012',
+            endDate: 'May 2016',
+            gpa: '3.8',
+            coursework: ['Data Structures', 'Algorithms', 'Machine Learning', 'Database Systems'],
+            description: 'Focused on software engineering and computer systems with emphasis on practical application development.',
+          },
+        },
+      ],
+    },
   ],
 };

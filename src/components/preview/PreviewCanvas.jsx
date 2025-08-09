@@ -4,11 +4,11 @@
  */
 
 import { useState } from 'react';
-import { ZoomIn, ZoomOut, Printer } from 'lucide-react';
 import { ZOOM_LEVELS, DEFAULT_ZOOM_INDEX } from '../../lib/theme';
 import { useEditorStore } from '../../store/useEditorStore';
 import { Classic } from './templates/Classic';
 import { Modern } from './templates/Modern';
+import { PreviewToolbar } from './PreviewToolbar';
 
 /**
  * PreviewCanvas component with A4 page and zoom controls
@@ -35,9 +35,7 @@ export function PreviewCanvas() {
     }
   };
 
-  const handlePrint = () => {
-    window.print();
-  };
+
 
   const handlePaperSizeChange = (newSize) => {
     setTheme({
@@ -59,59 +57,14 @@ export function PreviewCanvas() {
   return (
     <div className="h-full flex flex-col bg-gray-100">
       {/* Toolbar */}
-      <div className="bg-white border-b border-gray-200 px-4 py-3 no-print">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            {/* Zoom Controls */}
-            <div className="flex items-center gap-2">
-              <span className="text-sm font-medium text-gray-700">Zoom:</span>
-              <div className="flex items-center gap-1">
-                <button
-                  onClick={handleZoomOut}
-                  disabled={zoomIndex === 0}
-                  className="btn btn-ghost btn-sm"
-                  aria-label="Zoom out"
-                >
-                  <ZoomOut className="h-4 w-4" />
-                </button>
-                <span className="text-sm font-medium text-gray-900 min-w-[4rem] text-center">
-                  {Math.round(currentZoom * 100)}%
-                </span>
-                <button
-                  onClick={handleZoomIn}
-                  disabled={zoomIndex === ZOOM_LEVELS.length - 1}
-                  className="btn btn-ghost btn-sm"
-                  aria-label="Zoom in"
-                >
-                  <ZoomIn className="h-4 w-4" />
-                </button>
-              </div>
-            </div>
-
-            {/* Paper Size Toggle */}
-            <div className="flex items-center gap-2">
-              <span className="text-sm font-medium text-gray-700">Paper:</span>
-              <select
-                value={paperSize}
-                onChange={(e) => handlePaperSizeChange(e.target.value)}
-                className="text-sm border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent"
-                aria-label="Select paper size"
-              >
-                <option value="A4">A4</option>
-                <option value="Letter">Letter</option>
-              </select>
-            </div>
-          </div>
-          
-          <button
-            onClick={handlePrint}
-            className="btn btn-primary btn-md"
-          >
-            <Printer className="h-4 w-4 mr-2" />
-            Print / Save PDF
-          </button>
-        </div>
-      </div>
+      <PreviewToolbar
+        zoomIndex={zoomIndex}
+        onZoomIn={handleZoomIn}
+        onZoomOut={handleZoomOut}
+        zoomLevels={ZOOM_LEVELS}
+        paperSize={paperSize}
+        onPaperSizeChange={handlePaperSizeChange}
+      />
 
       {/* Canvas */}
       <div className="flex-1 overflow-auto p-4 lg:p-8">

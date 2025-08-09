@@ -8,6 +8,7 @@ import { ChevronDown, ChevronRight } from 'lucide-react';
 import { HeaderSection } from './sections/HeaderSection';
 import { SummarySection } from './sections/SummarySection';
 import { ExperienceSection } from './sections/ExperienceSection';
+import { EducationSection } from './sections/EducationSection';
 import { ThemePanel } from './ThemePanel';
 
 /**
@@ -51,6 +52,7 @@ export function EditorSidebar() {
     header: true,
     summary: true,
     experience: true,
+    education: false,
   });
 
   const toggleAccordion = (section) => {
@@ -116,6 +118,15 @@ export function EditorSidebar() {
               onToggle={() => toggleAccordion('experience')}
             >
               <ExperienceSection />
+            </AccordionSection>
+
+            {/* Education Section */}
+            <AccordionSection
+              title="Education"
+              isOpen={accordionState.education}
+              onToggle={() => toggleAccordion('education')}
+            >
+              <EducationSection />
             </AccordionSection>
           </div>
         )}
