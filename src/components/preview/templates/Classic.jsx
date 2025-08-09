@@ -27,27 +27,33 @@ export function Classic({ doc }) {
   const fontScale = theme.fontScale || 1;
 
   return (
-    <div className="font-serif text-gray-900 leading-relaxed" style={{ fontFamily: theme.fontFamily }}>
+    <div 
+      className="font-serif text-gray-900 leading-relaxed" 
+      style={{ 
+        fontFamily: `var(--font-family, ${theme.fontFamily})`,
+        lineHeight: `var(--line-height, ${theme.lineHeight || 1.5})`,
+      }}
+    >
       {/* Header */}
       {headerBlock && (
-        <header className="text-center mb-8 avoid-break">
+        <header className="text-center avoid-break" style={{ marginBottom: `${theme.spacing?.sectionY || 20}px` }}>
           <h1 
             className="font-bold text-gray-900 mb-2 tracking-wide"
-            style={{ fontSize: `${2.25 * fontScale}rem` }}
+            style={{ fontSize: `calc(2.25rem * var(--font-scale, ${fontScale}))` }}
           >
             {headerBlock.fields.name}
           </h1>
           {headerBlock.fields.title && (
             <p 
               className="text-gray-700 mb-3 font-medium"
-              style={{ fontSize: `${1.125 * fontScale}rem` }}
+              style={{ fontSize: `calc(1.125rem * var(--font-scale, ${fontScale}))` }}
             >
               {headerBlock.fields.title}
             </p>
           )}
           <p 
             className="text-gray-600"
-            style={{ fontSize: `${0.875 * fontScale}rem` }}
+            style={{ fontSize: `calc(0.875rem * var(--font-scale, ${fontScale}))` }}
           >
             {formatContactLine(headerBlock.fields)}
           </p>
@@ -56,16 +62,21 @@ export function Classic({ doc }) {
 
       {/* Summary */}
       {summaryBlock && summaryBlock.fields.content && (
-        <section className="mb-8 avoid-break">
+        <section className="avoid-break" style={{ marginBottom: `${theme.spacing?.sectionY || 20}px` }}>
           <h2 
-            className="text-gray-900 font-semibold mb-3 uppercase tracking-widest border-b border-gray-300 pb-1"
-            style={{ fontSize: `${1 * fontScale}rem` }}
+            className="text-gray-900 font-semibold mb-3 uppercase tracking-widest pb-1"
+            style={{ 
+              fontSize: `calc(1rem * var(--font-scale, ${fontScale}))`,
+              borderBottomColor: `var(--accent, ${theme.colors?.accent || 'hsl(221 83% 53%)'})`,
+              borderBottomWidth: '2px',
+              borderBottomStyle: 'solid'
+            }}
           >
             Professional Summary
           </h2>
           <p 
             className="text-gray-700 leading-relaxed"
-            style={{ fontSize: `${0.875 * fontScale}rem` }}
+            style={{ fontSize: `calc(0.875rem * var(--font-scale, ${fontScale}))` }}
           >
             {summaryBlock.fields.content}
           </p>

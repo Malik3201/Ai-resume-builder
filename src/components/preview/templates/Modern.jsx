@@ -28,13 +28,19 @@ export function Modern({ doc }) {
   const accentColor = theme.colors?.accent || 'hsl(221 83% 53%)';
 
   return (
-    <div className="text-gray-900 leading-relaxed" style={{ fontFamily: theme.fontFamily }}>
+    <div 
+      className="text-gray-900 leading-relaxed" 
+      style={{ 
+        fontFamily: `var(--font-family, ${theme.fontFamily})`,
+        lineHeight: `var(--line-height, ${theme.lineHeight || 1.5})`,
+      }}
+    >
       {/* Header */}
       {headerBlock && (
-        <header className="mb-6 avoid-break">
+        <header className="avoid-break" style={{ marginBottom: `${theme.spacing?.sectionY || 20}px` }}>
           <h1 
             className="font-bold text-gray-900 mb-2"
-            style={{ fontSize: `${2.5 * fontScale}rem` }}
+            style={{ fontSize: `calc(2.5rem * var(--font-scale, ${fontScale}))` }}
           >
             {headerBlock.fields.name}
           </h1>
@@ -42,8 +48,8 @@ export function Modern({ doc }) {
             <p 
               className="font-medium mb-3"
               style={{ 
-                fontSize: `${1.25 * fontScale}rem`,
-                color: accentColor
+                fontSize: `calc(1.25rem * var(--font-scale, ${fontScale}))`,
+                color: `var(--accent, ${accentColor})`
               }}
             >
               {headerBlock.fields.title}
@@ -51,7 +57,7 @@ export function Modern({ doc }) {
           )}
           <p 
             className="text-gray-600"
-            style={{ fontSize: `${0.875 * fontScale}rem` }}
+            style={{ fontSize: `calc(0.875rem * var(--font-scale, ${fontScale}))` }}
           >
             {formatContactLine(headerBlock.fields)}
           </p>
@@ -68,8 +74,8 @@ export function Modern({ doc }) {
               <h2 
                 className="font-semibold mb-3 pb-2 border-b-2"
                 style={{ 
-                  fontSize: `${1.125 * fontScale}rem`,
-                  borderColor: accentColor
+                  fontSize: `calc(1.125rem * var(--font-scale, ${fontScale}))`,
+                  borderColor: `var(--accent, ${accentColor})`
                 }}
               >
                 Summary

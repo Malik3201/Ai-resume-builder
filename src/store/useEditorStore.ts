@@ -193,6 +193,19 @@ export const useEditorStore = create((set, get) => ({
       theme: {
         ...doc.theme,
         ...partialTheme,
+        // Deep merge nested objects
+        colors: {
+          ...doc.theme?.colors,
+          ...partialTheme.colors,
+        },
+        spacing: {
+          ...doc.theme?.spacing,
+          ...partialTheme.spacing,
+        },
+        layout: {
+          ...doc.theme?.layout,
+          ...partialTheme.layout,
+        },
       },
     }));
   },

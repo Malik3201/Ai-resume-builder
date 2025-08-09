@@ -8,6 +8,7 @@ import { ChevronDown, ChevronRight } from 'lucide-react';
 import { HeaderSection } from './sections/HeaderSection';
 import { SummarySection } from './sections/SummarySection';
 import { ExperienceSection } from './sections/ExperienceSection';
+import { ThemePanel } from './ThemePanel';
 
 /**
  * Accordion component for collapsible sections
@@ -121,10 +122,7 @@ export function EditorSidebar() {
 
         {activeTab === 'theme' && (
           <div className="p-4">
-            <div className="text-center py-12 text-gray-500">
-              <p className="text-lg font-medium mb-2">Theme Customization</p>
-              <p className="text-sm">Coming soon! Customize fonts, colors, and layout.</p>
-            </div>
+            <ThemePanel />
           </div>
         )}
       </div>
